@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <title>チャネルアクセストークンv2.1 取り消し</title>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    </script>
+</head>
+
+<body>
+    <div class="container"><br>
+        <div class="card text-white bg-danger mb-3">
+            <h5 div class="card-header">
+                チャネルアクセストークンv2.1 取り消し
+            </h5 div>
+            <div class="card-body">
+                <p class="card-text">
+                    <a href="https://developers.line.biz/ja/reference/messaging-api/#issue-channel-access-token-v2-1" style="color:white">ドキュメント</a>
+            </div>
+        </div>
+
+        <div class="alert alert-danger" role="alert">
+            チャネルアクセストークンv2.1 取り消し
+        </div>
+        <div class="card card-body">
+            <h4>client_id (channel_id)</h4>
+            <input type="text" class="form-control" id="client_id" value="" placeholder="1573163733">
+            <br>
+            <h5>client_secret</h5>
+            <input type="text" class="form-control" id="client_secret" value="" placeholder="5c7fa48531c63cbd84b689a62ac090d1">
+            <br>
+            <div class="form-group">
+                <h5>access_token</h5>
+                <textarea class="form-control" id="access_token" rows="5"></textarea>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <br>
+                    <button class="btn btn-danger" type="button" id="ChannelAccessTokenRevoke">チャネルアクセストークンv2.1 取り消し</button>
+                    <br>
+                </div>
+            </div>
+            <br>
+            <div class="collapse" id="result_ChannelAccessTokenRevoke">
+
+
+
+                <div class="form-group">
+                    <h5>ステータスコード</h5>
+                    <input type="text" class="form-control" id="ChannelAccessTokenRevoke_response_status">
+                </div>
+                <div class="form-group">
+                    <h5>レスポンスボディ</h5>
+                    <textarea class="form-control" id="ChannelAccessTokenRevoke_response_body" rows="5"></textarea>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+        
+    </div>
+    <br>
+
+
+    </div>
+    <br>
+    </div>
+
+  
+
+
+</body>
+<script>
+
+
+
+
+$('select[class="form-control"]').select2({
+    tags: true
+});
+
+
+
+    $('#ChannelAccessTokenRevoke').on('click', function AccessTokenIssue() {
+        var client_id = $("#client_id").val();
+        var client_secret = $("#client_secret").val();
+        var access_token = $("#access_token").val();
+        body = {
+            "client_id": client_id, "client_secret": client_secret, "access_token": access_token
+        }
+        body = JSON.stringify(body)
+        fetch('/oauth2/v2.1/revoke', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: body
+
+        })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (json) {
+                $('#result_ChannelAccessTokenRevoke').collapse('show')
+                
+                $("#ChannelAccessTokenRevoke_response_status").val(JSON.stringify(json.response_status_code, null, "\t"))
+                $("#ChannelAccessTokenRevoke_response_body").val(JSON.stringify(json.response_body, null, "\t"))
+                        })
+    }
+    
+    )
+
+
+</script>
+
+</html>

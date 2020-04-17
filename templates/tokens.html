@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <title>チャネルアクセストークンv2.1 トークン取得</title>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    </script>
+</head>
+
+<body>
+    <div class="container"><br>
+        <div class="card text-white bg-primary mb-3">
+            <h5 div class="card-header">
+                チャネルアクセストークンv2.1 トークン取得
+            </h5 div>
+            <div class="card-body">
+                <p class="card-text">
+                    <a href="https://developers.line.biz/ja/reference/messaging-api/#get-issued-channel-access-tokens-v2-1" style="color:white">ドキュメント</a>
+            </div>
+        </div>
+
+        <div class="alert alert-primary" role="alert">
+            チャネルアクセストークンv2.1 トークン取得
+        </div>
+        <div class="card card-body">
+            <h5>grant_type</h5>
+            <input type="text" class="form-control" id="client_assertion_type" value="urn:ietf:params:oauth:client-assertion-type:jwt-bearer" readonly="readonly">
+            <br>
+            <div class="form-group">
+                <h5>client_assertion</h5>
+                <textarea class="form-control" id="client_assertion" rows="5"></textarea>
+                <a href="/oauth2/v2.1/jwt">JWT発行</a>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <br>
+                    <button class="btn btn-primary" type="button" id="ChannelAccessTokenIssue">チャネルアクセストークンv2.1 取得</button>
+                    <br>
+                </div>
+            </div>
+            <br>
+            <div class="collapse" id="result_ChannelAccessTokenIssueGet">
+
+
+
+                <div class="form-group">
+                    <h5>ステータスコード</h5>
+                    <input type="text" class="form-control" id="ChannelAccessTokenIssueGet_response_status">
+                </div>
+                <div class="form-group">
+                    <h5>レスポンスボディ</h5>
+                    <textarea class="form-control" id="ChannelAccessTokenIssueGet_response_body" rows="5"></textarea>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+        
+    </div>
+    <br>
+
+
+    </div>
+    <br>
+    </div>
+
+  
+
+
+</body>
+<script>
+
+
+
+
+    $('#ChannelAccessTokenIssue').on('click', function AccessTokenIssue() {
+        var grant_type = $("#grant_type").val();
+        var client_assertion_type = $("#client_assertion_type").val();
+        var client_assertion = $("#client_assertion").val();
+        body = {
+            "client_assertion_type": client_assertion_type, "client_assertion": client_assertion
+        }
+        body = JSON.stringify(body)
+        fetch('/oauth2/v2.1/tokens', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: body
+
+        })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (json) {
+                $('#result_ChannelAccessTokenIssueGet').collapse('show')
+                $("#ChannelAccessTokenIssueGet_response_status").val(JSON.stringify(json.response_status_code, null, "\t"))
+                $("#ChannelAccessTokenIssueGet_response_body").val(JSON.stringify(json.response_body, null, "\t"))
+                        })
+    }
+    
+    )
+
+</script>
+
+</html>

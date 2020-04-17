@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <title>チャネルアクセストークンv2.1 JWT発行</title>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    </script>
+</head>
+
+<body>
+    <div class="container"><br>
+        <div class="card text-white bg-dark mb-3">
+            <h5 div class="card-header">
+                チャネルアクセストークンv2.1 JWT発行
+            </h5 div>
+            <div class="card-body">
+                <p class="card-text">
+                    <a href="https://developers.line.biz/ja/docs/messaging-api/generate-json-web-token/#create_an_assertion_signing_key" style="color:white">ドキュメント</a>
+            </div>
+        </div>
+
+        <div class="alert alert-dark" role="alert">
+            JWT作成
+        </div>
+        <div class="card card-body">
+            <div class="form-group">
+                <h5>Header</h5>
+                <textarea class="form-control" id="header" rows="5">
+{
+"alg": "RS256",
+"typ": "JWT",
+"kid": "1dab2f4f-b73f-47a3-b99d-1730e22b9544"
+}</textarea>
+            </div>
+            <br>
+            <div class="form-group">
+                <h5>Payload</h5>
+                <textarea class="form-control" id="payload" rows="5" >
+{
+"iss": "1573163733",
+"sub": "1573163733",
+"aud": "https://api.line.me/",
+"exp": {{exp}},
+"token_exp": 3600
+}</textarea>
+            </div>
+            発行するJWTの有効期限(exp)はPayloadサンプルでは30分になります。<br>
+            token_expはチャネルアクセストークンの有効期限を秒で指定してください。<br><br>
+            <div class="form-group">
+                <h5>PrivateKey</h5>
+                <textarea class="form-control" id="privatekey" rows="10">
+{
+"p": "_mMa1ShoEgeQ0_bo8c1aLa626TQMEu9Ey6ecpgF1Ln_l9jwfPz0JNpJudHF0ZI_Jx6kYp1xNCO4mQpybz-d8N49tcLS9fsQ0IxfVuqJo92vDOT6JLji-l1ssN-Gw052yxtfbLAh21k_HahtEDQyXrASA1LQcFyuxcBpzuzqw6r8",
+"kty": "RSA",
+"q": "0ofg_iiqc-mwy95Jj2hh2YY5GfL-Zz1t9IZ2fUeTl1kNlt9njiW3nkrFP0sQWTXLo7ukyfph6-KhbmBGSgKGCarOFz-HbLpKevEB-zpHfvOYclYmSiBof__PudcTel67VyGH7zPfs5pF3ZZLzJ3pV9dQATgqNpa3EO4g2tFSU6k",
+"d": "rhMe1_FEp1luwTsjvtAwBXxfN4rkJ-Q92r3jHXSDj-yRNA8Drv5xEtEwFOBeJttEdiMeknsGctr3hKOxetxUl8H_XBamfxjzLw8XdZXa-ul60lveMaTrhZ_G8PwygP2AXgNR6_i08kk1QS5cAltpyCzt9kF8S6a67WdVwTvwuB_CR5cTTRGHuvdMt2klrIYZDsDZVD0bqaBmpAPKHyQtCNGgqVHTbzEVydAykbYKoHLK1-e9CViQFIJU_KeNJdTEcWy43HGmbColrbXki1yPIPLydRuSlihoJQ11fikIbaU2gC_79IeSfC5mu4kedTpwEpwOAkviZeV_pJP8YTYKwQ",
+"e": "AQAB",
+"use": "sig",
+"kid": "1dab2f4f-b73f-47a3-b99d-1730e22b9544",
+"qi": "hVkG582RG4xBesEEmCEUBdT-SpysjZ3QPHPDWI8Wm-FnnJs7K5ECmUpSkIbY4yfzBp7OZ9dyeP_iX-1iSyfLEECjDQIdAiGxLL_9ogCbl53IS_ezMRBCox9g0nf9aJ9eH3gxKCYKv3iJ2YwRilH9uNFTmH3wqYZGsvPsyARNjUE",
+"dp": "zSc1u5Qzod6yIQ9uO5uFz3OolZfg6OBH1godng9s5oxE8_j2pjReGsGrDIN2_6aqbzfi5w3cHoiZGH1edyPTnKcx9oP8kqA-_9I4DqTuDCO_NIpHbZxbsIrZtVNxHKiARjZMzk0hMaLzSpIkpnVyWErlbyS1xsX4-lSK4wLpLNc",
+"alg": "RS256",
+"dq": "SJSzyqu2aBPO8doGvjwcT-PoV7vgXTNebwjUXMiKZ4k6GCOZDfaO4TGh4vo7_qV_OUl9vGxnyezt_qGOWgGYuEh8mKM8Sw3Gk6_3IOessmXEztZIiRG3NTm6IbW2b1-tcpKKzLqzirXLFGO2aiqewbvnRyRX2U4Ievu9s_KqUVE",
+"n": "0TRR2UfFrbS6oL-PAN0Mefb4meBlMFFMSkQA9F_sMPk5-HPIohnzkyxsajXU9Q8hwCcnx3xe7nMB5QzHakqyONpiMyRPWFkErP5IxI4dQnnlWnKCuHOoscSIaB6pegm7vWShfLeAqXGV9AlgM-_oboVj0eD0BmYSAjn2sFVC2ZIi0weE2CCcRZCaXMOgPStjj5GnRusntvEh4jkivFd9q21jvBcAd3Lx8irg1M0hxrK_Uy0Larod-1xrfF6NH5dhnGjCVyDSxaWguBhpPC4xS6HXOJbLX67F2NxCS9Qz9B6EmjHLzqwpYCaRoazQs4C4gfHs4XLZLOXHcR2YOxTlFw"
+}</textarea>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <br>
+                    <button class="btn btn-primary" type="button" id="JWTissue">JWT 作成</button>
+                    <br>
+                </div>
+            </div>
+            <br>
+            <div class="collapse" id="result_JWTIssue">
+
+
+                <div class="form-group">
+                    <h5>JWT</h5>
+                    <textarea class="form-control" id="JWTTokenIssue_response_body" rows="5"></textarea>
+                </div>
+
+            </div>
+        </div>
+
+<br>    
+    </div>
+    <br>
+
+
+    </div>
+    <br>
+    </div>
+
+  
+
+
+</body>
+<script>
+
+$('#JWTissue').on('click', function AccessTokenIssue() {
+        var header = $("#header").val();
+        var payload = $("#payload").val();
+        var privatekey = $("#privatekey").val();
+
+        try {
+            JSON.parse(header)
+        } catch (e) {
+            window.alert("不正な形式のheaderです。")
+            return
+        }
+        try {
+
+            JSON.parse(payload)
+        } catch (e) {
+            window.alert("不正な形式のpayloadです。")
+            return
+        }
+        try {
+            JSON.parse(privatekey)
+        } catch (e) {
+            window.alert("不正な形式のprivatekeyです。")
+            return
+        }
+
+
+        body = {
+            "header": header, "payload": payload, "privatekey": privatekey
+        }
+        body = JSON.stringify(body)
+        fetch('/oauth2/v2.1/jwt', 
+        {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: body
+
+        })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (json) {
+                $('#result_JWTIssue').collapse('show')
+                $("#JWTTokenIssue_response_body").val(json.response_body)
+                        })
+    }
+    
+    )
+
+
+</script>
+
+</html>
